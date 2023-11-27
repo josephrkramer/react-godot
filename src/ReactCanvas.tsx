@@ -1,67 +1,67 @@
-import * as React from "react"
+import * as React from "react";
 
-import { FunctionComponent, useEffect, useRef, useState } from "react"
+import { FunctionComponent, useEffect, useRef, useState } from "react";
 
-import { useLoading } from "./AsyncLoading"
+import { useLoading } from "./AsyncLoading";
 
 export type ReactEngineProps = {
-  engine: Engine
-  pck: string
-  width?: number
-  height?: number
-  params?: any
-  resize?: boolean
-}
+  engine: Engine;
+  pck: string;
+  width?: number;
+  height?: number;
+  params?: any;
+  resize?: boolean;
+};
 
 function toFailure(err) {
-  var msg = err.message || err
-  console.error(msg)
-  return { msg, mode: "notice", initialized: true }
+  var msg = err.message || err;
+  console.error(msg);
+  return { msg, mode: "notice", initialized: true };
 }
 
 const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
   engine,
   pck,
   width = 480,
-  height = 300
+  height = 300,
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [instance, setInstance] = useState()
-  const [loadingState, changeLoadingState] = useLoading()
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [instance, setInstance] = useState<Engine | null>(null);
+  const [loadingState, changeLoadingState] = useLoading();
 
   useEffect(() => {
     if (engine.isWebGLAvailable()) {
-      changeLoadingState({ mode: "indeterminate" })
-      setInstance(new engine())
+      changeLoadingState({ mode: "indeterminate" });
+      setInstance(new engine());
     } else {
-      changeLoadingState(toFailure("WebGL not available"))
+      changeLoadingState(toFailure("WebGL not available"));
     }
-  }, [engine])
+  }, [engine]);
 
   useEffect(() => {
-    if (instance) {
+    if (instance != null) {
       instance
         .startGame(pck)
         .then(() => {
-          changeLoadingState({ mode: "hidden", initialized: true })
+          changeLoadingState({ mode: "hidden", initialized: true });
         })
-        .catch(err => changeLoadingState(toFailure(err)))
+        .catch((err) => changeLoadingState(toFailure(err)));
 
       instance.setProgressFunc((current, total) => {
         if (total > 0) {
-          changeLoadingState({ mode: "progress", percent: current / total })
+          changeLoadingState({ mode: "progress", percent: current / total });
         } else {
-          changeLoadingState({ mode: "indeterminate" })
+          changeLoadingState({ mode: "indeterminate" });
         }
-      })
+      });
     }
-  }, [instance, pck, changeLoadingState])
+  }, [instance, pck, changeLoadingState]);
 
   useEffect(() => {
     if (instance) {
-      instance.setCanvas(canvasRef.current)
+      instance.setCanvas(canvasRef.current);
     }
-  }, [instance, canvasRef.current])
+  }, [instance, canvasRef.current]);
 
   return (
     <canvas
@@ -75,7 +75,7 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
       <br />
       Please try updating or use a different browser.
     </canvas>
-  )
-}
+  );
+};
 
-export default ReactCanvas
+export default ReactCanvas;
