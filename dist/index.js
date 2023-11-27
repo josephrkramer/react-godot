@@ -31,7 +31,7 @@ var ReactGodot = function (props) {
         if (resize && outerRef.current) {
             setDimensions([
                 outerRef.current.clientWidth,
-                outerRef.current.clientHeight
+                outerRef.current.clientHeight,
             ]);
         }
     }, [resize, outerRef.current]);

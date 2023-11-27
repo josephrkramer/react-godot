@@ -3,6 +3,7 @@ import * as React from "react";
 import { FunctionComponent, useEffect, useRef, useState } from "react";
 
 import { useLoading } from "./AsyncLoading";
+import type { Engine } from "./typings";
 
 export type ReactEngineProps = {
   engine: Engine;

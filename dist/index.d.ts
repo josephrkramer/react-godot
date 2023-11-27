@@ -3,6 +3,7 @@
  */
 import "./styles.css";
 import { FunctionComponent } from "react";
+import type { EngineLoaderDescription } from "./typings";
 export declare type ReactGodotProps = {
     script: EngineLoaderDescription;
     pck: string;
