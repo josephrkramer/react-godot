@@ -13,7 +13,7 @@ import ReactCanvas from "./ReactCanvas";
 
 import type { Engine, EngineLoaderDescription } from "./typings";
 
-const useScript = (url, onLoad) => {
+const useScript = (url: string, onLoad: () => void) => {
   useEffect(() => {
     const script = document.createElement("script");
 

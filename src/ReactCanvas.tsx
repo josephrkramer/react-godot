@@ -14,7 +14,7 @@ export type ReactEngineProps = {
   resize?: boolean;
 };
 
-function toFailure(err) {
+function toFailure(err: any) {
   var msg = err.message || err;
   console.error(msg);
   return { msg, mode: "notice", initialized: true };
@@ -46,9 +46,9 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
         .then(() => {
           changeLoadingState({ mode: "hidden", initialized: true });
         })
-        .catch((err) => changeLoadingState(toFailure(err)));
+        .catch((err: any) => changeLoadingState(toFailure(err)));
 
-      instance.setProgressFunc((current, total) => {
+      instance.setProgressFunc((current: number, total: number) => {
         if (total > 0) {
           changeLoadingState({ mode: "progress", percent: current / total });
         } else {
