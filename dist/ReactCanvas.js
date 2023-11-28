@@ -32,6 +32,10 @@ var ReactCanvas = function (_a) {
         if (instance != null) {
             var olderGodot = typeof instance.setProgressFunc === "function";
             console.log("starting", canvasRef.current, instance);
+            if (!olderGodot && wasm == null) {
+                changeLoadingState(toFailure("You must pass in the wasm prop for newer versions of Godot!"));
+                return;
+            }
             instance
                 .startGame(olderGodot
                 ? pck
