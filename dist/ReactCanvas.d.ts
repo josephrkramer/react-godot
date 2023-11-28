@@ -3,6 +3,7 @@ import type { Engine } from "./typings";
 export declare type ReactEngineProps = {
     engine: Engine;
     pck: string;
+    wasm?: string;
     width?: number;
     height?: number;
     params?: any;

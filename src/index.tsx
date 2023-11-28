@@ -32,6 +32,7 @@ const useScript = (url: string, onLoad: () => void) => {
 export type ReactGodotProps = {
   script: EngineLoaderDescription;
   pck: string;
+  wasm?: string;
   resize?: boolean;
   width?: number;
   height?: number;
@@ -39,7 +40,7 @@ export type ReactGodotProps = {
 };
 
 const ReactGodot: FunctionComponent<ReactGodotProps> = (props) => {
-  const { script, pck, resize = false, width, height, params } = props;
+  const { script, pck, wasm, resize = false, width, height, params } = props;
   const outerRef = useRef<HTMLDivElement>(null);
   const [engine, setEngine] = useState<Engine>(null);
   const [dimensions, setDimensions] = useState([width, height]);
@@ -65,6 +66,7 @@ const ReactGodot: FunctionComponent<ReactGodotProps> = (props) => {
           <ReactCanvas
             pck={pck}
             engine={engine}
+            wasm={wasm}
             width={dimensions[0]}
             height={dimensions[1]}
             params={params}

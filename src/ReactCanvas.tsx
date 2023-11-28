@@ -1,6 +1,12 @@
 import * as React from "react";
 
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
 
 import { useLoading } from "./AsyncLoading";
 import type { Engine } from "./typings";
@@ -8,6 +14,7 @@ import type { Engine } from "./typings";
 export type ReactEngineProps = {
   engine: Engine;
   pck: string;
+  wasm?: string;
   width?: number;
   height?: number;
   params?: any;
@@ -23,6 +30,7 @@ function toFailure(err: any) {
 const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
   engine,
   pck,
+  wasm,
   width = 480,
   height = 300,
 }) => {
@@ -39,27 +47,46 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
     }
   }, [engine]);
 
+  const progressFunc = useCallback((current: number, total: number) => {
+    if (total > 0) {
+      changeLoadingState({ mode: "progress", percent: current / total });
+    } else {
+      changeLoadingState({ mode: "indeterminate" });
+    }
+  }, []);
+
   useEffect(() => {
     if (instance != null) {
+      const olderGodot = typeof instance.setProgressFunc === "function";
+      console.log("starting", canvasRef.current, instance);
+
       instance
-        .startGame(pck)
+        .startGame(
+          olderGodot
+            ? pck
+            : {
+                executable: wasm?.replace(/\.wasm$/i, ""),
+                canvas: canvasRef.current,
+                mainPack: pck,
+                canvasResizePolicy: 0,
+                onProgress: progressFunc,
+              }
+        )
         .then(() => {
           changeLoadingState({ mode: "hidden", initialized: true });
         })
         .catch((err: any) => changeLoadingState(toFailure(err)));
 
-      instance.setProgressFunc((current: number, total: number) => {
-        if (total > 0) {
-          changeLoadingState({ mode: "progress", percent: current / total });
-        } else {
-          changeLoadingState({ mode: "indeterminate" });
-        }
-      });
+      // older versions of Godot have this callback register
+      if (olderGodot) {
+        instance.setProgressFunc(progressFunc);
+      }
     }
-  }, [instance, pck, changeLoadingState]);
+  }, [instance, pck, wasm, changeLoadingState]);
 
   useEffect(() => {
-    if (instance) {
+    // older versions of Godot use this method to set the canvas
+    if (instance && typeof instance.setCanvas === "function") {
       instance.setCanvas(canvasRef.current);
     }
   }, [instance, canvasRef.current]);
