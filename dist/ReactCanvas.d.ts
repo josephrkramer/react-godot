@@ -1,6 +1,6 @@
-import { FunctionComponent } from "react";
-import type { Engine } from "./typings";
-export declare type ReactEngineProps = {
+import { FunctionComponent } from 'react';
+import type { Engine } from './typings';
+export interface ReactEngineProps {
     engine: Engine;
     pck: string;
     wasm?: string;
@@ -8,6 +8,7 @@ export declare type ReactEngineProps = {
     height?: number;
     params?: any;
     resize?: boolean;
-};
+    onExitFunc?: Function;
+}
 declare const ReactCanvas: FunctionComponent<ReactEngineProps>;
 export default ReactCanvas;

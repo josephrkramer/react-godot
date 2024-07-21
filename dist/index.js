@@ -1,14 +1,14 @@
 /**
  * @function ReactGodot
  */
-import "./styles.css";
-import * as React from "react";
-import { useEffect, useRef, useState } from "react";
-import AsyncLoading from "./AsyncLoading";
-import ReactCanvas from "./ReactCanvas";
+import './styles.css';
+import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import AsyncLoading from './AsyncLoading';
+import ReactCanvas from './ReactCanvas';
 var useScript = function (url, onLoad) {
     useEffect(function () {
-        var script = document.createElement("script");
+        var script = document.createElement('script');
         script.src = url;
         script.async = true;
         script.onload = onLoad;
@@ -28,14 +28,14 @@ var ReactGodot = function (props) {
         setEngine(function () { return scope.Engine; });
     });
     useEffect(function () {
-        if (resize && outerRef.current) {
+        if (resize && (outerRef.current != null)) {
             setDimensions([
                 outerRef.current.clientWidth,
-                outerRef.current.clientHeight,
+                outerRef.current.clientHeight
             ]);
         }
     }, [resize, outerRef.current]);
-    return (React.createElement("div", { id: "wrap", ref: outerRef },
+    return (React.createElement("div", { id: 'wrap', ref: outerRef },
         React.createElement(AsyncLoading, null, engine && (React.createElement(ReactCanvas, { pck: pck, engine: engine, wasm: wasm, width: dimensions[0], height: dimensions[1], params: params })))));
 };
 export default ReactGodot;
