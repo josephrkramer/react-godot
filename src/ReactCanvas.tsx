@@ -19,7 +19,7 @@ export interface ReactEngineProps {
   height?: number
   params?: any
   resize?: boolean
-  onExitFunc?: Function
+  onExitFunc?: () => void
 }
 
 function toFailure (err: any) {

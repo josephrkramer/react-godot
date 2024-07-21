@@ -8,7 +8,7 @@ export interface ReactEngineProps {
     height?: number;
     params?: any;
     resize?: boolean;
-    onExitFunc?: Function;
+    onExitFunc?: () => void;
 }
 declare const ReactCanvas: FunctionComponent<ReactEngineProps>;
 export default ReactCanvas;

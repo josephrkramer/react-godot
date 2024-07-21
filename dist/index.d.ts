@@ -12,6 +12,7 @@ export interface ReactGodotProps {
     width?: number;
     height?: number;
     params?: any;
+    onExitFunc?: () => void;
 }
 declare const ReactGodot: FunctionComponent<ReactGodotProps>;
 export default ReactGodot;
