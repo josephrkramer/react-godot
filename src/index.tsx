@@ -37,10 +37,11 @@ export interface ReactGodotProps {
   width?: number
   height?: number
   params?: any
+  onExitFunc?: () => void
 }
 
 const ReactGodot: FunctionComponent<ReactGodotProps> = (props) => {
-  const { script, pck, wasm, resize = false, width, height, params } = props
+  const { script, pck, wasm, resize = false, width, height, params, onExitFunc } = props
   const outerRef = useRef<HTMLDivElement>(null)
   const [engine, setEngine] = useState<Engine>(null)
   const [dimensions, setDimensions] = useState([width, height])
@@ -70,6 +71,7 @@ const ReactGodot: FunctionComponent<ReactGodotProps> = (props) => {
             width={dimensions[0]}
             height={dimensions[1]}
             params={params}
+            onExitFunc={onExitFunc}
           />
         )}
       </AsyncLoading>

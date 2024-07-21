@@ -19,6 +19,7 @@ export interface ReactEngineProps {
   height?: number
   params?: any
   resize?: boolean
+  onExitFunc?: () => void
 }
 
 function toFailure (err: any) {
@@ -32,7 +33,8 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
   pck,
   wasm,
   width = 480,
-  height = 300
+  height = 300,
+  onExitFunc
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [instance, setInstance] = useState<Engine | null>(null)
@@ -52,6 +54,15 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
       changeLoadingState({ mode: 'progress', percent: current / total })
     } else {
       changeLoadingState({ mode: 'indeterminate' })
+    }
+  }, [])
+
+  const exitFunc = useCallback((status_code: number) => {
+    console.log(`Godot exit code: ${status_code}`)
+    if (onExitFunc != undefined) {
+      onExitFunc()
+    } else {
+      console.log("onExitFunc is undefined. No function to call")
     }
   }, [])
 
@@ -78,7 +89,8 @@ const ReactCanvas: FunctionComponent<ReactEngineProps> = ({
                 canvas: canvasRef.current,
                 mainPack: pck,
                 canvasResizePolicy: 0,
-                onProgress: progressFunc
+                onProgress: progressFunc,
+                onExit: exitFunc
               }
         )
         .then(() => {
